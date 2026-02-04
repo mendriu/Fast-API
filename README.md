@@ -1,6 +1,6 @@
 # FastAPI Project
 
-A FastAPI application with Docker, PostgreSQL and JWT authentication.
+A FastAPI application with Docker, PostgreSQL, JWT authentication and middleware.
 
 ## Setup
 
@@ -29,6 +29,8 @@ app/
 ├── main.py              # FastAPI application
 ├── database.py          # Database configuration
 ├── auth.py              # JWT authentication utilities
+├── middleware.py        # Request logging middleware
+├── exceptions.py        # Custom exception handlers
 ├── schemas/             # Pydantic models (request/response)
 │   ├── item.py
 │   └── user.py
@@ -52,6 +54,26 @@ PostgreSQL database running in Docker container:
 - Password: `postgres`
 
 Data is persisted in Docker volume `postgres_data`.
+
+## Middleware
+
+### CORS
+Cross-Origin Resource Sharing enabled for all origins.
+
+### Request Logging
+Every request is logged with:
+- Unique request ID
+- HTTP method and path
+- Response status code
+- Processing time
+
+Response headers include:
+- `X-Request-ID` - unique request identifier
+- `X-Process-Time` - request processing time
+
+### Exception Handling
+- Custom `AppException` for controlled errors
+- Global exception handler for unexpected errors (returns 500)
 
 ## Authentication
 
@@ -87,6 +109,7 @@ curl http://localhost:8000/auth/me \
 
 ### Root
 - `GET /` - Hello World
+- `GET /health` - Health check
 
 ### Items
 | Method | Endpoint | Description |
