@@ -1,46 +1,40 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 
+from app import crud
+from app.database import get_db
 from app.schemas import ItemCreate, ItemResponse
 
 router = APIRouter(prefix="/items", tags=["items"])
 
-# Tymczasowa "baza danych" w pamięci
-fake_db: dict[int, dict] = {}
-counter = 0
-
 
 @router.get("/", response_model=list[ItemResponse])
-async def list_items():
-    return list(fake_db.values())
+async def list_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return crud.get_items(db, skip=skip, limit=limit)
 
 
 @router.get("/{item_id}", response_model=ItemResponse)
-async def get_item(item_id: int):
-    if item_id not in fake_db:
+async def get_item(item_id: int, db: Session = Depends(get_db)):
+    db_item = crud.get_item(db, item_id)
+    if not db_item:
         raise HTTPException(status_code=404, detail="Item not found")
-    return fake_db[item_id]
+    return db_item
 
 
 @router.post("/", response_model=ItemResponse, status_code=201)
-async def create_item(item: ItemCreate):
-    global counter
-    counter += 1
-    item_dict = {"id": counter, **item.model_dump()}
-    fake_db[counter] = item_dict
-    return item_dict
+async def create_item(item: ItemCreate, db: Session = Depends(get_db)):
+    return crud.create_item(db, item)
 
 
 @router.put("/{item_id}", response_model=ItemResponse)
-async def update_item(item_id: int, item: ItemCreate):
-    if item_id not in fake_db:
+async def update_item(item_id: int, item: ItemCreate, db: Session = Depends(get_db)):
+    db_item = crud.update_item(db, item_id, item)
+    if not db_item:
         raise HTTPException(status_code=404, detail="Item not found")
-    item_dict = {"id": item_id, **item.model_dump()}
-    fake_db[item_id] = item_dict
-    return item_dict
+    return db_item
 
 
 @router.delete("/{item_id}", status_code=204)
-async def delete_item(item_id: int):
-    if item_id not in fake_db:
+async def delete_item(item_id: int, db: Session = Depends(get_db)):
+    if not crud.delete_item(db, item_id):
         raise HTTPException(status_code=404, detail="Item not found")
-    del fake_db[item_id]
