@@ -11,6 +11,7 @@ services:
       - PYTHONDONTWRITEBYTECODE=1
       - PYTHONUNBUFFERED=1
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/fastapi_db
+      - SECRET_KEY=your-secret-key-change-in-production
     depends_on:
       db:
         condition: service_healthy
