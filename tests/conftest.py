@@ -1,3 +1,8 @@
+import os
+
+# Set test database URL before importing app
+os.environ["DATABASE_URL"] = "sqlite:///:memory:"
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -7,10 +12,8 @@ from sqlalchemy.pool import StaticPool
 from app.database import Base, get_db
 from app.main import app
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
-
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL,
+    "sqlite:///:memory:",
     connect_args={"check_same_thread": False},
     poolclass=StaticPool,
 )
