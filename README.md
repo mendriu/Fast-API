@@ -1,6 +1,6 @@
 # FastAPI Project
 
-A FastAPI application with Docker, PostgreSQL, JWT authentication and middleware.
+A FastAPI application with Docker, PostgreSQL, JWT authentication, middleware and tests.
 
 ## Setup
 
@@ -42,7 +42,32 @@ app/
 └── routers/             # API endpoints
     ├── auth.py
     └── items.py
+tests/
+├── conftest.py          # Pytest fixtures
+├── test_main.py         # Root endpoint tests
+├── test_auth.py         # Authentication tests
+└── test_items.py        # Items CRUD tests
 ```
+
+## Testing
+
+Run tests with pytest:
+
+```bash
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=app
+
+# Run specific test file
+pytest tests/test_items.py
+
+# Run specific test
+pytest tests/test_auth.py::test_login_success
+```
+
+Tests use SQLite in-memory database for isolation.
 
 ## Database
 
