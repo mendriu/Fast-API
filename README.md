@@ -188,6 +188,48 @@ curl http://localhost:8000/auth/me \
 }
 ```
 
+## Development Tools
+
+### Formatting
+
+```bash
+# Format code with black and isort
+make format
+
+# Or manually
+black app/ tests/
+isort app/ tests/
+```
+
+### Linting
+
+```bash
+# Run all linters
+make lint
+
+# Or manually
+ruff check app/ tests/
+pylint app/
+mypy app/
+```
+
+### Pre-commit hooks
+
+```bash
+# Install hooks
+pre-commit install
+
+# Run on all files
+pre-commit run --all-files
+```
+
+### All checks
+
+```bash
+# Format + lint + test
+make check
+```
+
 ## Documentation
 
 - Swagger UI: http://localhost:8000/docs

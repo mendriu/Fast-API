@@ -11,3 +11,11 @@ python-multipart
 pytest
 httpx
 pytest-asyncio
+
+# Dev tools
+black
+isort
+mypy
+ruff
+pylint
+pre-commit
