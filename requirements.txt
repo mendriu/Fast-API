@@ -4,6 +4,7 @@ sqlalchemy
 psycopg2-binary
 python-jose[cryptography]
 passlib[bcrypt]
+bcrypt<4.2.0
 email-validator
 python-multipart
 
