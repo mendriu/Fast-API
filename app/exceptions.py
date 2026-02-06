@@ -14,16 +14,16 @@ class AppException(Exception):
 
 def setup_exception_handlers(app: FastAPI):
     @app.exception_handler(AppException)
-    async def app_exception_handler(request: Request, exc: AppException):
-        logger.warning(f"AppException: {exc.detail}")
+    async def app_exception_handler(_request: Request, exc: AppException):
+        logger.warning("AppException: %s", exc.detail)
         return JSONResponse(
             status_code=exc.status_code,
             content={"detail": exc.detail}
         )
 
     @app.exception_handler(Exception)
-    async def general_exception_handler(request: Request, exc: Exception):
-        logger.error(f"Unhandled exception: {exc}", exc_info=True)
+    async def general_exception_handler(_request: Request, exc: Exception):
+        logger.error("Unhandled exception: %s", exc, exc_info=True)
         return JSONResponse(
             status_code=500,
             content={"detail": "Internal server error"}

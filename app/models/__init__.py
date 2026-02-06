@@ -1,2 +1,2 @@
-from .item import Item
-from .user import User
+from .item import Item as Item
+from .user import User as User
