@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -7,9 +9,14 @@ from app.middleware import LoggingMiddleware
 from app.routers.auth import router as auth_router
 from app.routers.items import router as items_router
 
-Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="FastAPI Project", version="1.0.0")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    Base.metadata.create_all(bind=engine)
+    yield
+
+
+app = FastAPI(title="FastAPI Project", version="1.0.0", lifespan=lifespan)
 
 # CORS
 app.add_middleware(
