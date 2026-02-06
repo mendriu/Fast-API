@@ -1,6 +1,6 @@
 # FastAPI Project
 
-A FastAPI application with Docker, PostgreSQL, JWT authentication, middleware and tests.
+A FastAPI application with Docker, PostgreSQL, JWT authentication, middleware, tests and CI/CD.
 
 ## Setup
 
@@ -47,6 +47,39 @@ tests/
 ├── test_main.py         # Root endpoint tests
 ├── test_auth.py         # Authentication tests
 └── test_items.py        # Items CRUD tests
+.github/workflows/
+├── ci.yml               # CI pipeline (test, lint, build)
+└── cd.yml               # CD pipeline (push to registry, deploy)
+```
+
+## CI/CD
+
+### Continuous Integration (CI)
+
+Runs on every push and pull request to `main`:
+
+1. **Test** - Run pytest with Python 3.12
+2. **Lint** - Check code with Ruff
+3. **Build** - Build Docker image (without push)
+
+### Continuous Deployment (CD)
+
+Runs on version tags (`v*`):
+
+1. **Build** - Build Docker image
+2. **Push** - Push to GitHub Container Registry (ghcr.io)
+3. **Deploy** - Deployment notification
+
+### Create a Release
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+Docker image will be available at:
+```
+ghcr.io/<username>/fast-api:1.0.0
 ```
 
 ## Testing
